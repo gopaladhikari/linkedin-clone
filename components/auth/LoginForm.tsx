@@ -54,7 +54,8 @@ export default function LoginForm() {
         dispatch(login({ uid, displayName, email, photoURL }));
       }
     });
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleGoogleLogin = () => {
     signInWithPopup(auth, provider)

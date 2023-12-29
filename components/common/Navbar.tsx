@@ -19,7 +19,7 @@ export default function Navbar() {
               alt="logo"
               width={120}
               height={120}
-              className="object-contain"
+              className="object-contain w-auto"
             />
           </Link>
 
