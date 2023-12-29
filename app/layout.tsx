@@ -12,8 +12,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "LinkedIn Clone",
-    template: "%s | LinkedIn Clone  ",
+    template: "%s | Linkedin Clone",
+    default: "Linkedin Clone",
   },
   description: "Created by gopaladhikari",
 };
@@ -22,7 +22,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={cn("min-h-screen antialiased", inter.className)}
+        className={cn(
+          "min-h-screen antialiased bg-[#F4F2EE] dark:bg-[#2b2c28]",
+          inter.className
+        )}
         suppressHydrationWarning
       >
         <ThemeProvider
