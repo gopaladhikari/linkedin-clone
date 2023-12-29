@@ -1,3 +1,7 @@
 export default function Footer() {
-  return <div>Footer</div>;
+  return (
+    <footer className="text-center py-3">
+      Developed by gopaladhikari in 2023. All right reserved
+    </footer>
+  );
 }
