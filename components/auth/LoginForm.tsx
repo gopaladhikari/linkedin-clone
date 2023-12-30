@@ -18,6 +18,7 @@ import { auth } from "@/conf/firebase";
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/features/authSlice";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
 type Inputs = z.infer<typeof loginSchema>;
@@ -25,6 +26,7 @@ type Inputs = z.infer<typeof loginSchema>;
 const provider = new GoogleAuthProvider();
 
 export default function LoginForm() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const {
     register,
@@ -39,7 +41,7 @@ export default function LoginForm() {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {})
       .catch((error) => {
-        const errorMessage = error.message.replace("Firebase: ", "");
+        const errorMessage = error.message.replace("Firebase: Error", "");
         setError("email", {
           type: "manual",
           message: errorMessage,
@@ -57,21 +59,17 @@ export default function LoginForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleGoogleLogin = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const {
-          user: { uid, displayName, email, photoURL },
-        } = result;
-        dispatch(login({ uid, displayName, email, photoURL }));
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        setError("root", {
-          type: "manual",
-          message: errorMessage,
-        });
+  const handleGoogleLogin = async () => {
+    try {
+      const res = await signInWithPopup(auth, provider);
+      if (res.user) router.push("/feed");
+    } catch (error: any) {
+      const errorMessage = error.message;
+      setError("root", {
+        type: "manual",
+        message: errorMessage,
       });
+    }
   };
 
   return (
@@ -128,7 +126,6 @@ export default function LoginForm() {
           />
           <span>Login with Google</span>
         </button>
-        {errors.root && <p className="text-red-500">{errors.root.message}</p>}
       </div>
     </div>
   );
