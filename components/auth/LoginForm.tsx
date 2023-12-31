@@ -10,15 +10,12 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   signInWithEmailAndPassword,
-  onAuthStateChanged,
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
 import { auth } from "@/conf/firebase";
-import { useDispatch } from "react-redux";
-import { login } from "@/redux/features/authSlice";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/redux/store";
 import { Button } from "../ui/button";
 
 type Inputs = z.infer<typeof loginSchema>;
@@ -27,7 +24,10 @@ const provider = new GoogleAuthProvider();
 
 export default function LoginForm() {
   const router = useRouter();
-  const dispatch = useDispatch();
+
+  const { isLoggedIn } = useAppSelector((state) => state.authReducer);
+  if (isLoggedIn) router.push("/feed");
+
   const {
     register,
     handleSubmit,
@@ -37,27 +37,17 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = ({ email, password }) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {})
-      .catch((error) => {
-        const errorMessage = error.message.replace("Firebase: Error", "");
-        setError("email", {
-          type: "manual",
-          message: errorMessage,
-        });
+  const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
+    try {
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      if (res.user) router.push("/feed");
+    } catch (error: any) {
+      setError("root", {
+        type: "manual",
+        message: error.message,
       });
+    }
   };
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const { uid, displayName, email, photoURL } = user;
-        dispatch(login({ uid, displayName, email, photoURL }));
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleGoogleLogin = async () => {
     try {

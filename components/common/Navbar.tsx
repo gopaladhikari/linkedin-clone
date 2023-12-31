@@ -17,7 +17,7 @@ export default function Navbar() {
 
           <div className="flex gap-6 items-center">
             <ThemeToggler />
-            <ul className="flex items-center gap-8 border-r border-black/30 dark:border-white/30 pr-6">
+            <ul className="flex items-center gap-8 border-r border-black/30 dark:border-white/30 pr-6 max-md:hidden">
               <li>
                 <Link href="/articles">
                   <MdOutlineArticle className="text-xl mx-auto" /> Article

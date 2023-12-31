@@ -11,9 +11,9 @@ export default function Logo() {
       <Image
         src="/logo.png"
         alt="logo"
-        width={120}
-        height={120}
-        className="object-contain w-auto"
+        width={80}
+        height={80}
+        className="object-contain w-auto max-md:mt-2"
       />
     </Link>
   );
