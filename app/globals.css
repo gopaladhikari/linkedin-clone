@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input,
+input:active,
+input :focus {
+  box-shadow: none !important;
+}
